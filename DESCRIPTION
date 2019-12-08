@@ -1,0 +1,18 @@
+Package: wikitablr
+Type: Package
+Title: Simple Readers for Wikipedia's Tables
+Version: 0.1.0
+Author: Jessica Keast
+Maintainer: Jessica Keast <jnkeast@gmail.com>
+Description: A collection of functions to read in and clean tables from Wikipedia.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    dplyr,
+    rvest,
+    janitor,
+    stringr,
+    purrr,
+    xml2
+RoxygenNote: 7.0.1
