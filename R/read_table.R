@@ -31,10 +31,14 @@ read_wiki_table <- function(url, table_number = 1, remove_footnotes = TRUE, to_n
   xml2::xml_add_sibling(rvest::xml_nodes(wiki_table, "br"), comma)
 
   # extract table from html
-  wiki_table <- wiki_table %>% rvest::html_nodes("table.wikitable") %>% purrr::pluck(table_number) %>%
+  wiki_table <- wiki_table %>%
+    rvest::html_nodes("table.wikitable") %>%
+    purrr::pluck(table_number) %>%
     rvest::html_table(fill = TRUE) %>% # removes empty columns this is often necessary for tables that have a columns of images
-    janitor::remove_empty(which = "cols") %>% clean_rows() %>% clean_wiki_names(...) %>% add_na(to_na,
-                                                                                                special_to_na)
+    janitor::remove_empty(which = "cols") %>%
+    clean_rows() %>%
+    clean_wiki_names(...) %>%
+    add_na(to_na, special_to_na)
 
   if (remove_footnotes) {
     # remove footnotes from data
@@ -90,3 +94,5 @@ read_all_tables <- function(url, remove_footnotes = TRUE, to_na = "", special_to
   }
   return(wiki_tables)
 }
+
+map(1:nrow(pres), "[")

@@ -49,17 +49,23 @@ add_na <- function(wiki_table, to_na = "", special_to_na = TRUE){
 #' @export
 
 clean_rows <- function(wiki_table){
-  # wiki_table <- wiki_table %>%
-  #   dplyr::mutate_all(as.character)
-  #
-  # i <- 1
-  #
-  # while(i <= nrow(wiki_table)){
-  #   if(colnames(wiki_table) == wiki_table[i,]){
-  #     wiki_table <- wiki_table[-c(i),]
-  #     i <- i-1
-  #   }
-  #   i <- i+1
-  # }
+  wiki_table <- wiki_table %>%
+    dplyr::mutate_all(as.character)
+
+  i <- 1
+
+  while(i <= nrow(wiki_table)){
+    suppressWarnings(
+      if(colnames(wiki_table) == wiki_table[i,]){
+        wiki_table <- wiki_table[-c(i),]
+        i <- i-1
+      }
+    )
+    i <- i+1
+  }
   return(wiki_table)
 }
+
+
+
+
