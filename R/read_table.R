@@ -36,7 +36,7 @@ read_wiki_table <- function(url, table_number = 1, remove_footnotes = TRUE, to_n
     purrr::pluck(table_number) %>%
     rvest::html_table(fill = TRUE) %>% # removes empty columns this is often necessary for tables that have a columns of images
     janitor::remove_empty(which = "cols") %>%
-    clean_rows() %>%
+    #clean_rows() %>%
     clean_wiki_names(...) %>%
     add_na(to_na, special_to_na)
 
@@ -90,9 +90,30 @@ read_all_tables <- function(url, remove_footnotes = TRUE, to_na = "", special_to
     wiki_tables <- map(wiki_tables, ~ as.data.frame(
       map(.x, ~ stringr::str_remove_all(.x, "\\[.*]"))))%>%
       map(~ add_na(.x))%>%
+      map(~ clean_rows(.x)) %>%
+      map(clean_wiki_names, ...) %>%
       map(~ janitor::remove_empty(.x, which = "cols"))
   }
   return(wiki_tables)
 }
 
-map(1:nrow(pres), "[")
+#' @name read_no_clean
+#' @title read_no_clean
+#' @importFrom dplyr %>%
+#' @param url A character vector of the url of a wikipedia page containing a table. Default is 1.
+#' @param table_number A numeric denoting which number table the desired table is on the page (e.g. the second table on the page)
+#' @return Dataframe of wikipedia table
+#' @examples
+#' read_no_clean('https://en.wikipedia.org/wiki/List_of_most-followed_Instagram_accounts')
+#' read_no_clean('https://en.wikipedia.org/wiki/List_of_cryptids', 3)
+#' read_no_clean('https://en.wikipedia.org/wiki/List_of_Pixar_films')
+#' @export
+
+read_no_clean <- function(url, table_number = 1){
+  wiki_table <- xml2::read_html(url) %>%
+    rvest::html_nodes("table") %>%
+    purrr::pluck(table_number) %>%
+    rvest::html_table()
+
+  return(wiki_table)
+}
