@@ -41,6 +41,20 @@ add_na <- function(wiki_table, to_na = "", special_to_na = TRUE){
 }
 
 
+#' @name remove_footnotes
+#' @title remove_footnotes
+#' @param wiki_table A dataframe
+#' @return Cleaned dataframe
+#' @export
+
+remove_footnotes <- function(wiki_table, ...){
+  wiki_table <- as.data.frame(purrr::map(wiki_table, ~stringr::str_remove_all(.x, "\\[.*]"))) %>%
+    add_na(...) %>%
+    janitor::remove_empty(which = "cols")
+
+  return(wiki_table)
+}
+
 #' @name clean_rows
 #' @title clean_rows
 #' @importFrom dplyr %>%

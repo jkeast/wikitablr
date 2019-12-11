@@ -12,28 +12,80 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+# wikitablr <img src="image/800px-Wikipedia-logo-v2-en.svg.png" align="right" height=140/>
 
-
+<!-- badges: start -->
 [![Travis-CI Build Status](https://travis-ci.org/jkeast/wikitablr.svg?branch=master)](https://travis-ci.org/jkeast/wikitablr) 
+<!-- badges: end -->
 
 
 `wikitablr` is an R package that has the tools to simply webscrape tables from wikipedia, and clean for common formatting issues. The intention here is to empower beginners to explore data on practically any subject that interests them (as long as there's a wikipedia table on it), but anyone can utilize this package.
 
-`wikitablr` also takes data that looks like this:
+`wikitablr` takes data that looks like this:
 
-```{r}
-head(read_no_clean("https://en.wikipedia.org/wiki/List_of_songs_recorded_by_the_Beatles"))
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
+library(wikitablr)
+head(read_no_clean("https://en.wikipedia.org/wiki/List_of_songs_recorded_by_the_Beatles", 3))
 
 ```
+
 and makes it look like this:
 
-```{r}
-head(read_wiki_table("https://en.wikipedia.org/wiki/List_of_songs_recorded_by_the_Beatles"))
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
+head(read_wiki_table("https://en.wikipedia.org/wiki/List_of_songs_recorded_by_the_Beatles", 2))
 
 ```
 
 ## Installation
-`wikitablr` is not yet on CRAN. Install by running: 
-```devtools::install_github("wikitablr")```
-```library(wikitablr)```
+
+You can install the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("jkeast/wikitablr")
+```
+## Example
+
+`wikitablr` allows you to either read in and clean your code all at once:
+
+```{r}
+head(read_wiki_table("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts"))
+```
+
+Or use its cleaning functions seperately:
+
+```{r}
+example <- read_no_clean("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts")
+head(example)
+```
+
+```{r}
+head(clean_wiki_names(example))
+```
+
+```{r}
+head(remove_footnotes(example))
+```
+
+#### Read all tables
+
+`wikitablr` also allows you to read in and clean all tables on a page at once, putting them into a list.
+
+This is the first table on the wikipedia page "List of colleges and universities in Massachusetts":
+
+```{r}
+example2 <- read_all_tables("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts")
+
+head(example2[[1]])
+```
+
+This is the second table on the page:
+```{r}
+head(example2[[2]])
+```
+
+And third:
+```{r}
+head(example2[[3]])
+```
 
