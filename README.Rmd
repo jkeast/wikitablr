@@ -49,21 +49,25 @@ devtools::install_github("jkeast/wikitablr")
 `wikitablr` allows you to either read in and clean your code all at once:
 
 ```{r}
+#read in first table on page
 head(read_wiki_table("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts"))
 ```
 
 Or use its cleaning functions seperately:
 
 ```{r}
+#read in first table from url without cleaning it
 example <- read_no_clean("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts")
 head(example)
 ```
 
 ```{r}
+#clean names of table
 head(clean_wiki_names(example))
 ```
 
 ```{r}
+#remove footnotes from table
 head(remove_footnotes(example))
 ```
 
@@ -71,21 +75,20 @@ head(remove_footnotes(example))
 
 `wikitablr` also allows you to read in and clean all tables on a page at once, putting them into a list.
 
-This is the first table on the wikipedia page "List of colleges and universities in Massachusetts":
+This is the first table on the wikipedia page "List of highest grossing films":
 
 ```{r}
-example2 <- read_all_tables("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts")
+example2 <- read_all_tables("https://en.wikipedia.org/wiki/List_of_highest-grossing_films")
 
 head(example2[[1]])
 ```
 
-This is the second table on the page:
+and a couple more:
 ```{r}
 head(example2[[2]])
-```
 
-And third:
-```{r}
 head(example2[[3]])
+
+head(example2[[4]])
 ```
 

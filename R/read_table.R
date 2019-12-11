@@ -81,7 +81,7 @@ read_all_tables <- function(url, remove_footnotes = TRUE, to_na = "", special_to
     # removes empty columns
     # this is often necessary for tables that have a columns of images --- which R doesn't read in
     map(~ janitor::remove_empty(.x, which = "cols")) %>%
-    map(~ clean_rows(.x)) %>%
+    #map(~ clean_rows(.x)) %>%
     map(clean_wiki_names, ...) %>%
     map(~ add_na(.x, to_na, special_to_na))
 
@@ -90,7 +90,7 @@ read_all_tables <- function(url, remove_footnotes = TRUE, to_na = "", special_to
     wiki_tables <- map(wiki_tables, ~ as.data.frame(
       map(.x, ~ stringr::str_remove_all(.x, "\\[.*]"))))%>%
       map(~ add_na(.x))%>%
-      map(~ clean_rows(.x)) %>%
+      #map(~ clean_rows(.x)) %>%
       map(clean_wiki_names, ...) %>%
       map(~ janitor::remove_empty(.x, which = "cols"))
   }
