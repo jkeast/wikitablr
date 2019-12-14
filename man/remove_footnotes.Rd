@@ -8,6 +8,8 @@ remove_footnotes(wiki_table, ...)
 }
 \arguments{
 \item{wiki_table}{A dataframe}
+
+\item{...}{Passes arguments to add_na()}
 }
 \value{
 Cleaned dataframe

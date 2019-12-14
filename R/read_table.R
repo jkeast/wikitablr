@@ -97,23 +97,23 @@ read_all_tables <- function(url, remove_footnotes = TRUE, to_na = "", special_to
   return(wiki_tables)
 }
 
-#' @name read_no_clean
-#' @title read_no_clean
+#' @name read_table_raw
+#' @title read_table_raw
 #' @importFrom dplyr %>%
 #' @param url A character vector of the url of a wikipedia page containing a table. Default is 1.
 #' @param table_number A numeric denoting which number table the desired table is on the page (e.g. the second table on the page)
 #' @return Dataframe of wikipedia table
 #' @examples
-#' read_no_clean('https://en.wikipedia.org/wiki/List_of_most-followed_Instagram_accounts')
-#' read_no_clean('https://en.wikipedia.org/wiki/List_of_cryptids', 3)
-#' read_no_clean('https://en.wikipedia.org/wiki/List_of_Pixar_films')
+#' read_table_raw('https://en.wikipedia.org/wiki/List_of_most-followed_Instagram_accounts')
+#' read_table_raw('https://en.wikipedia.org/wiki/List_of_cryptids', 3)
+#' read_table_raw('https://en.wikipedia.org/wiki/List_of_Pixar_films')
 #' @export
 
-read_no_clean <- function(url, table_number = 1){
+read_table_raw <- function(url, table_number = 1){
   wiki_table <- xml2::read_html(url) %>%
     rvest::html_nodes("table") %>%
     purrr::pluck(table_number) %>%
-    rvest::html_table()
+    rvest::html_table(fill = TRUE)
 
   return(wiki_table)
 }

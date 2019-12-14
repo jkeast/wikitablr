@@ -44,6 +44,7 @@ add_na <- function(wiki_table, to_na = "", special_to_na = TRUE){
 #' @name remove_footnotes
 #' @title remove_footnotes
 #' @param wiki_table A dataframe
+#' @param ... Passes arguments to add_na()
 #' @return Cleaned dataframe
 #' @export
 

@@ -87,7 +87,7 @@ Or use its cleaning functions seperately:
 
 ``` r
 #read in first table from url without cleaning it
-example <- read_no_clean("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts")
+example <- read_table_raw("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts")
 head(example)
 #>                           School Location[note 1]             Control[1]
 #> 1 American International College      Springfield Private not-for-profit

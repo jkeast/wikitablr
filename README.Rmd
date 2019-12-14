@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 library(wikitablr)
-head(read_no_clean("https://en.wikipedia.org/wiki/List_of_songs_recorded_by_the_Beatles", 3))
+head(read_table_raw("https://en.wikipedia.org/wiki/List_of_songs_recorded_by_the_Beatles", 3))
 
 ```
 
@@ -57,7 +57,7 @@ Or use its cleaning functions seperately:
 
 ```{r}
 #read in first table from url without cleaning it
-example <- read_no_clean("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts")
+example <- read_table_raw("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts")
 head(example)
 ```
 
