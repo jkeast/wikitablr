@@ -68,7 +68,7 @@ clean_rows <- function(wiki_table){
 
   i <- 1
 
-  while(i <= nrow(wiki_table)){
+  tryCatch({while(i <= nrow(wiki_table)){
     suppressWarnings(
       if(colnames(wiki_table) == wiki_table[i,]){
         wiki_table <- wiki_table[-c(i),]
@@ -76,7 +76,9 @@ clean_rows <- function(wiki_table){
       }
     )
     i <- i+1
-  }
+  }}, error = function(e) cat("Error when checking for row duplicates: ",e$message, "\n")
+  )
+
   return(wiki_table)
 }
 
