@@ -7,10 +7,10 @@
 read_wiki_table(
   url,
   table_number = 1,
+  replace_linebreak = ", ",
   remove_footnotes = TRUE,
   to_na = "",
   special_to_na = TRUE,
-  replace_linebreak = ", ",
   ...
 )
 }
@@ -19,13 +19,13 @@ read_wiki_table(
 
 \item{table_number}{A numeric denoting which number table the desired table is on the page (e.g. the second table on the page)}
 
+\item{replace_linebreak}{A character string denoting what linebreaks within dataframe cells are to be replaced with. Default is ' ,'.}
+
 \item{remove_footnotes}{A boolean denoting whether footnote markings are to be removed or not. Default is TRUE.}
 
 \item{to_na}{A character string that when solitary in a dataframe cell is to be converted to NA. Default is ''.}
 
 \item{special_to_na}{A boolean denoting whether solitary special characters in dataframe cells are to be converted to NA. Default is TRUE.}
-
-\item{replace_linebreak}{A character string denoting what linebreaks within dataframe cells are to be replaced with. Default is ' ,'.}
 
 \item{...}{passes arguments to clean_wiki_names()}
 }

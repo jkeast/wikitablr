@@ -4,12 +4,14 @@
 \alias{read_table_raw}
 \title{read_table_raw}
 \usage{
-read_table_raw(url, table_number = 1)
+read_table_raw(url, table_number = 1, replace_linebreak = ", ")
 }
 \arguments{
 \item{url}{A character vector of the url of a wikipedia page containing a table. Default is 1.}
 
 \item{table_number}{A numeric denoting which number table the desired table is on the page (e.g. the second table on the page)}
+
+\item{replace_linebreak}{A character string denoting what linebreaks within dataframe cells are to be replaced with. Default is ' ,'.}
 }
 \value{
 Dataframe of wikipedia table

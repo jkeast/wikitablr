@@ -64,25 +64,32 @@ remove_footnotes <- function(wiki_table, ...){
 #' @export
 
 clean_rows <- function(wiki_table){
-  wiki_table <- wiki_table %>%
+
+  #line of code pulled from Psidom's stack overflow answer here:
+  #https://stackoverflow.com/questions/44398252/remove-rows-with-the-same-value-across-all-columns
+  wiki_table <- wiki_table[rowSums(wiki_table[-1] != wiki_table[[2]], na.rm = TRUE) != 0,]
+
+  tryCatch({wiki_table <- wiki_table %>%
     dplyr::mutate_all(as.character)
 
-  i <- 1
+    i <- 1
 
-  tryCatch({while(i <= nrow(wiki_table)){
-    suppressWarnings(
-      if(colnames(wiki_table) == wiki_table[i,]){
+    while(i <= nrow(wiki_table)){
+      if(length(unique(wiki_table[i,]))==1){
         wiki_table <- wiki_table[-c(i),]
         i <- i-1
       }
-    )
-    i <- i+1
-  }}, error = function(e) cat("Error when checking for row duplicates: ",e$message, "\n")
+
+      suppressWarnings(
+        if(colnames(wiki_table) == wiki_table[i,]){
+          wiki_table <- wiki_table[-c(i),]
+          i <- i-1
+        }
+      )
+      i <- i+1
+    }}, error = function(e) cat("Error when checking for header duplicates in rows: ",e$message, "\n")
   )
 
   return(wiki_table)
 }
-
-
-
 
