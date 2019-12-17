@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-wikitablr <img src="man/figures/image/800px-Wikipedia-logo-v2-en.svg.png" align="right" height=140/>
-====================================================================================================
+wikitablr <img src="man/figures/wikitablr_hex_logo.png" align="right" height=140/>
+==================================================================================
 
 <!-- badges: start -->
 [![Travis-CI Build Status](https://travis-ci.org/jkeast/wikitablr.svg?branch=master)](https://travis-ci.org/jkeast/wikitablr) <!-- badges: end -->
