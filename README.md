@@ -10,9 +10,20 @@ wikitablr <img src="man/figures/wikitablr_hex_logo.png" align="right" height=140
 
 `wikitablr` takes data that looks like this:
 
-    #>   X1                                                       X2
-    #> 1 NA Indicates song not written by the members of the Beatles
-    #> 2 NA                                 Indicates live recording
+    #>                        Song Core catalogue release(s)
+    #> 1  "Across the Universe"[e]   Let It Be, Past Masters
+    #> 2           "Act Naturally"                     Help!
+    #> 3      "All I've Got to Do"          With the Beatles
+    #> 4           "All My Loving"          With the Beatles
+    #> 5        "All Together Now"          Yellow Submarine
+    #> 6 "All You Need Is Love"[f]      Magical Mystery Tour
+    #>                   Songwriter(s)         Lead vocal(s)[d] Year     Ref(s)
+    #> 1             Lennon, McCartney              John Lennon 1969 [44], [45]
+    #> 2 Johnny Russell, Voni Morrison              Ringo Starr 1965       [46]
+    #> 3             Lennon, McCartney                   Lennon 1963       [47]
+    #> 4             Lennon, McCartney           Paul McCartney 1963       [47]
+    #> 5             Lennon, McCartney McCartney, (with Lennon) 1969       [48]
+    #> 6             Lennon, McCartney                   Lennon 1967 [49], [50]
 
 and makes it look like this:
 

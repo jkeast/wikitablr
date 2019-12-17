@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 library(wikitablr)
-head(read_wiki_raw("https://en.wikipedia.org/wiki/List_of_songs_recorded_by_the_Beatles", 3))
+head(read_wiki_raw("https://en.wikipedia.org/wiki/List_of_songs_recorded_by_the_Beatles", 2))
 
 ```
 
