@@ -22,12 +22,13 @@
 
 read_wiki_table <- function(url, table_number = 1, replace_linebreak = ", ", remove_footnotes = TRUE, to_na = "", special_to_na = TRUE, ...) {
 
-  wiki_table <- read_table_raw(url, table_number, replace_linebreak) %>%
+  wiki_table <- read_wiki_raw(url, table_number, replace_linebreak) %>%
     # removes empty columns this is often necessary for tables that have a columns of images
-    janitor::remove_empty(which = "cols") %>%
     clean_rows() %>%
     clean_wiki_names(...) %>%
-    add_na(to_na, special_to_na)
+    add_na(to_na, special_to_na) %>%
+    janitor::remove_empty(which = "cols") %>%
+    convert_types()
 
   if (remove_footnotes) {
     # remove footnotes from data
@@ -71,9 +72,10 @@ read_all_tables <- function(url, remove_footnotes = TRUE, to_na = "", special_to
     map(~ clean_rows(.x)) %>%
     # removes empty columns
     # this is often necessary for tables that have a columns of images --- which R doesn't read in
-    map(~ janitor::remove_empty(.x, which = "cols")) %>%
     map(clean_wiki_names, ...) %>%
-    map(~ add_na(.x, to_na, special_to_na))
+    map(~ add_na(.x, to_na, special_to_na)) %>%
+    map(~ janitor::remove_empty(.x, which = "cols")) %>%
+    map(~ convert_types(.x))
 
   if (remove_footnotes) {
     # remove footnotes from data
@@ -85,20 +87,20 @@ read_all_tables <- function(url, remove_footnotes = TRUE, to_na = "", special_to
   return(wiki_tables)
 }
 
-#' @name read_table_raw
-#' @title read_table_raw
+#' @name read_wiki_raw
+#' @title read_wiki_raw
 #' @importFrom dplyr %>%
 #' @param url A character vector of the url of a wikipedia page containing a table. Default is 1.
 #' @param table_number A numeric denoting which number table the desired table is on the page (e.g. the second table on the page)
 #' @param replace_linebreak A character string denoting what linebreaks within dataframe cells are to be replaced with. Default is ' ,'.
 #' @return Dataframe of wikipedia table
 #' @examples
-#' read_table_raw('https://en.wikipedia.org/wiki/List_of_most-followed_Instagram_accounts')
-#' read_table_raw('https://en.wikipedia.org/wiki/List_of_cryptids', 3)
-#' read_table_raw('https://en.wikipedia.org/wiki/List_of_Pixar_films')
+#' read_wiki_raw('https://en.wikipedia.org/wiki/List_of_most-followed_Instagram_accounts')
+#' read_wiki_raw('https://en.wikipedia.org/wiki/List_of_cryptids', 3)
+#' read_wiki_raw('https://en.wikipedia.org/wiki/List_of_Pixar_films')
 #' @export
 
-read_table_raw <- function(url, table_number = 1, replace_linebreak = ", "){
+read_wiki_raw <- function(url, table_number = 1, replace_linebreak = ", "){
   # read in html from webpage
   wiki_table <- xml2::read_html(url)
 

@@ -16,7 +16,10 @@ Imports:
     janitor,
     stringr,
     purrr,
-    xml2
+    xml2,
+    readr,
+    lubridate,
+    testit
 RoxygenNote: 7.0.1
 Suggests: 
     testthat

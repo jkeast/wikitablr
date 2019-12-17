@@ -65,14 +65,16 @@ remove_footnotes <- function(wiki_table, ...){
 
 clean_rows <- function(wiki_table){
 
+  wiki_table <- wiki_table[!is.na(names(wiki_table))]
+
   #line of code pulled from Psidom's stack overflow answer here:
   #https://stackoverflow.com/questions/44398252/remove-rows-with-the-same-value-across-all-columns
   wiki_table <- wiki_table[rowSums(wiki_table[-1] != wiki_table[[2]], na.rm = TRUE) != 0,]
 
-  tryCatch({wiki_table <- wiki_table %>%
+  wiki_table <- wiki_table %>%
     dplyr::mutate_all(as.character)
 
-    i <- 1
+    tryCatch({i <- 1
 
     while(i <= nrow(wiki_table)){
       if(length(unique(wiki_table[i,]))==1){
@@ -93,3 +95,23 @@ clean_rows <- function(wiki_table){
   return(wiki_table)
 }
 
+
+#' @name convert_types
+#' @title convert_types
+#' @importFrom dplyr %>%
+#' @param wiki_table A dataframe for which the rows will be cleaned
+#' @return Cleaned dataframe
+#' @export
+
+convert_types <- function(wiki_table){
+  suppressWarnings(
+    wiki_table <- wiki_table %>%
+      dplyr::mutate_all(as.character)%>%
+      dplyr::mutate_if(~!testit::has_warning(readr::parse_number(.x)), readr::parse_number)%>%
+      dplyr::mutate_if(~all(!is.na(lubridate::dmy(.x))), lubridate::dmy)%>%
+      dplyr::mutate_if(~all(!is.na(lubridate::mdy(.x))), lubridate::mdy)%>%
+      dplyr::mutate_if(~all(!is.na(lubridate::ymd(.x))), lubridate::ymd))
+
+  return(wiki_table)
+
+}

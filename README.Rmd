@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# wikitablr <img src="image/800px-Wikipedia-logo-v2-en.svg.png" align="right" height=140/>
+# wikitablr <img src="man/figures/image/800px-Wikipedia-logo-v2-en.svg.png" align="right" height=140/>
 
 <!-- badges: start -->
 [![Travis-CI Build Status](https://travis-ci.org/jkeast/wikitablr.svg?branch=master)](https://travis-ci.org/jkeast/wikitablr) 
@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 library(wikitablr)
-head(read_table_raw("https://en.wikipedia.org/wiki/List_of_songs_recorded_by_the_Beatles", 3))
+head(read_wiki_raw("https://en.wikipedia.org/wiki/List_of_songs_recorded_by_the_Beatles", 3))
 
 ```
 
@@ -57,13 +57,15 @@ Or use its cleaning functions seperately:
 
 ```{r}
 #read in first table from url without cleaning it
-example <- read_table_raw("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts")
+example <- read_wiki_raw("https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_Massachusetts")
 head(example)
 ```
 
 ```{r}
 #clean names of table
-head(clean_wiki_names(example))
+example <- clean_wiki_names(example)
+
+head(example)
 ```
 
 ```{r}
@@ -75,15 +77,15 @@ head(remove_footnotes(example))
 
 `wikitablr` also allows you to read in and clean all tables on a page at once, putting them into a list.
 
-This is the first table on the wikipedia page "List of highest grossing films":
+This is the first table on the wikipedia page "List of World Series champions":
 
 ```{r}
-example2 <- read_all_tables("https://en.wikipedia.org/wiki/List_of_highest-grossing_films")
+example2 <- read_all_tables("https://en.wikipedia.org/wiki/List_of_World_Series_champions")
 
 head(example2[[1]])
 ```
 
-and a couple more:
+and the rest:
 ```{r}
 head(example2[[2]])
 
