@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-wikitablr <img src="man/figures/wikitablr_hex_logo.png" align="right" height=140/>
+wikitablr <img src="man/figures/wikitablr_hex_logo.png" align="right" height=150/>
 ==================================================================================
 
 <!-- badges: start -->
@@ -67,13 +67,20 @@ head(read_wiki_table("https://en.wikipedia.org/wiki/List_of_colleges_and_univers
 #> 4             Assumption College        Worcester Private not-for-profit
 #> 5                 Babson College        Wellesley Private not-for-profit
 #> 6   Bard College at Simon's Rock Great Barrington Private not-for-profit
-#>                                type enrollment_2013_2014 founded accreditation
-#> 1               Master's university                 2177    1885            17
-#> 2             Baccalaureate college                 1817    1821            18
-#> 3               Master's university                 1455    1946            19
-#> 4               Master's university                 2813    1904            20
-#> 5         Special-focus institution                 3250    1919            21
-#> 6 Baccalaureate/associate's college                  354    1964            22
+#>                                type enrollment_2013_2014 founded
+#> 1               Master's university                 2177    1885
+#> 2             Baccalaureate college                 1817    1821
+#> 3               Master's university                 1455    1946
+#> 4               Master's university                 2813    1904
+#> 5         Special-focus institution                 3250    1919
+#> 6 Baccalaureate/associate's college                  354    1964
+#>             accreditation
+#> 1 AOTA, APTA, CCNE, NEASC
+#> 2                   NEASC
+#> 3      NASM, NEASC, NLNAC
+#> 4                   NEASC
+#> 5                   NEASC
+#> 6                   NEASC
 ```
 
 Or use its cleaning functions seperately:
@@ -214,11 +221,11 @@ head(example2[[3]])
 #> 6   13                 Boston Red Sox    9      4 0.692   1903
 
 head(example2[[4]])
-#>   count                                   matchup record years
-#> 1    11  Los Angeles Dodgers vs. New York Yankees      8  1941
-#> 2     7 New York Yankees vs. San Francisco Giants      5  1921
-#> 3     5  New York Yankees vs. St. Louis Cardinals      3  1926
-#> 4     4       Atlanta Braves vs. New York Yankees      3  1957
-#> 5     4    Boston Red Sox vs. St. Louis Cardinals      2  1946
-#> 6     4           Chicago Cubs vs. Detroit Tigers      2  1907
+#>   count                                   matchup         record years
+#> 1    11  Los Angeles Dodgers vs. New York Yankees   Yankees, 8–3  1941
+#> 2     7 New York Yankees vs. San Francisco Giants   Yankees, 5–2  1921
+#> 3     5  New York Yankees vs. St. Louis Cardinals Cardinals, 3–2  1926
+#> 4     4       Atlanta Braves vs. New York Yankees   Yankees, 3–1  1957
+#> 5     4    Boston Red Sox vs. St. Louis Cardinals      Tied, 2–2  1946
+#> 6     4           Chicago Cubs vs. Detroit Tigers      Tied, 2–2  1907
 ```

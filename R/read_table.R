@@ -24,17 +24,15 @@ read_wiki_table <- function(url, table_number = 1, replace_linebreak = ", ", rem
 
   wiki_table <- read_wiki_raw(url, table_number, replace_linebreak) %>%
     # removes empty columns this is often necessary for tables that have a columns of images
-    clean_rows() %>%
     clean_wiki_names(...) %>%
+    clean_rows() %>%
     add_na(to_na, special_to_na) %>%
     janitor::remove_empty(which = "cols") %>%
     convert_types()
 
   if (remove_footnotes) {
     # remove footnotes from data
-    wiki_table <- as.data.frame(purrr::map(wiki_table, ~stringr::str_remove_all(.x, "\\[.*]"))) %>%
-      add_na(to_na, special_to_na) %>%
-      janitor::remove_empty(which = "cols")
+    wiki_table <- remove_footnotes(wiki_table)
   }
   return(wiki_table)
 }
@@ -79,10 +77,7 @@ read_all_tables <- function(url, remove_footnotes = TRUE, to_na = "", special_to
 
   if (remove_footnotes) {
     # remove footnotes from data
-    wiki_tables <- map(wiki_tables, ~ as.data.frame(
-      map(.x, ~ stringr::str_remove_all(.x, "\\[.*]"))))%>%
-      map(~ add_na(.x))%>%
-      map(~ janitor::remove_empty(.x, which = "cols"))
+    wiki_tables <- map(wiki_tables, ~ remove_footnotes(.x))
   }
   return(wiki_tables)
 }

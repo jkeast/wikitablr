@@ -1,0 +1,159 @@
+---
+title: "wikitablr Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include=FALSE}
+library(wikitablr)
+library(dplyr)
+library(stringr)
+```
+
+There are two main families of functions in `wikitablr`:
+
+1. Those that read in a table and
+2. Those that clean a table
+
+There is much conjunction within these categories, and there are functions that do both. These are `read_all_tables()`, which reads in and cleans every table at the specified Wikipedia page and returns them in a list, and `read_wiki_table()`, which reads in and cleans a specified table (designated by the table number).
+
+```{r}
+#for this vignette I will be using the wikipedia page of Bob's Burgers episodes
+#this is a table of all episodes in season 10
+read_wiki_table("https://en.wikipedia.org/wiki/List_of_Bob%27s_Burgers_episodes", table_number = 11) %>% head(3)
+```
+
+
+However, users do have the option to read and clean their table seperately. In this vignette, I detail all of my cleaning functions, and show how they are used in `read_wiki_table()`.
+
+A table can be read in without cleaning using `read_wiki_raw()`.
+
+```{r}
+episodes <- read_wiki_raw("https://en.wikipedia.org/wiki/List_of_Bob%27s_Burgers_episodes", 11)
+head(episodes, 3)
+```
+
+#### Clean column names
+
+`clean_wiki_names()` cleans the column names of a dataframe; it removes footnotes and special characters, and converts letter cases. `clean_wiki_names()` utilizes the functionality of `janitor::clean_names()` and can convert to any case (default is snake_case).
+
+Here, we look at the column names of the uncleaned data:
+
+```{r}
+colnames(episodes)
+```
+
+And compare it to the cleaned column names.
+
+```{r}
+episodes <- clean_wiki_names(episodes)
+colnames(episodes)
+```
+
+
+#### Add NAs to data
+`add_na()` takes blank cells, solitary special characters, and any designated string, and converts them to `r NA`. This can be utilized on the table for Bob's Burgers' current season, which has some "TBA" and "TBD" values for unreleased episodes. Using `add_na()` we can convert these to `r NA`:
+
+```{r}
+episodes <- add_na(episodes, to_na = c("TBA", "TBD"))
+
+tail(episodes, 3)
+```
+
+#### Remove footnotes
+`remove_footnotes()` does just that! Wikipedia's footnotes are contained within brackets ([ ]), so this function removes anything contained in brackets (as well as the brackets themselves) from the data.
+
+```{r}
+episodes <- remove_footnotes(episodes)
+
+head(episodes, 3)
+```
+
+#### Convert data types
+`wikitablr` also does some initial parsing of data types. `convert_type()` can detect if a column is likely Date or numeric, and re-codes it as such:
+
+```{r}
+str(convert_types(episodes))
+```
+
+As can be seen, this function isn't perfect, and the original_air_date column was parsed into character, rather than Date. A situation like this calls for some manual data-cleaning:
+
+```{r}
+#using stringr to remove the duplicate date in parentheses
+episodes$original_air_date <- stringr::str_remove(episodes$original_air_date, "\\(.*\\)") %>% stringr::str_trim()
+
+str(convert_types(episodes))
+```
+
+Now `convert_type()` correctly recodes original_air_date as Date!
+
+#### Remove unnecessary rows
+
+`wikitablr`'s final function, `clean_rows()` removes unnecessary rows: those that are duplicates of the header, and those that have the same value for every column (seen when the Wikipedia table has a banner in the middle).
+
+To illustrate the first purpose, I use a table of US presidents by age.
+```{r}
+presidents <- read_wiki_raw("https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age", 2)
+
+tail(presidents, 3)
+```
+
+As can be seen, the header is duplicated at the bottom row. This is a quirk not uncommmon in Wikipedia tables; however, it is quickly and easily solved with `clean_rows()`.
+```{r}
+clean_rows(presidents) %>% tail(3)
+```
+
+Wikipedia's other quirk, banners in the middle of tables, is seen in this list of Marvel Cinematic Universe films:
+
+```{r}
+marvel <- read_wiki_raw("https://en.wikipedia.org/wiki/List_of_Marvel_Cinematic_Universe_films")
+
+head(marvel, 3)
+```
+
+Here, the row of "Phase One" could interfere with cleaning and analysis, so it is best to remove it with `clean_rows()`
+
+```{r}
+clean_rows(marvel) %>% head(3)
+```
+
+### Clean all at once
+
+`read_wiki_table()` utilizes all of these cleaning functions internally, so you don't have to!
+
+```{r}
+read_wiki_table("https://en.wikipedia.org/wiki/List_of_Bob%27s_Burgers_episodes", 11) %>% head(3)
+```
+
+Because it calls on the above functions, `read_wiki_table()` takes the same arguments as well.
+
+```{r}
+read_wiki_table("https://en.wikipedia.org/wiki/List_of_Bob%27s_Burgers_episodes", 11, to_na = "Mario D'Anna", case = "all_caps") %>% head(3)
+```
+
+### Less common scenarios
+
+Although `wikitablr` cannot account for all the inconsistencies found in Wikipedia tables, here are a few more that you might come across:
+
+* both `read_wiki_table()` and `read_wiki_raw()` have the `replace_linebreak` parameter. This parameter determines what is input in place of a linebreak is cell. The default is `", "`, but users can change to any other character string desired.
+```{r}
+read_wiki_table("https://en.wikipedia.org/wiki/List_of_songs_recorded_by_the_Beatles", 2, replace_linebreak = "\n") %>% head(3)
+```
+
+* `add_na()` converts solitary special characters to NA by default, but this can be overridden.
+```{r}
+read_wiki_raw("https://en.wikipedia.org/wiki/List_of_World_Series_champions", 2) %>% add_na() %>% tail(3)
+
+read_wiki_raw("https://en.wikipedia.org/wiki/List_of_World_Series_champions", 2) %>% add_na(special_to_na = FALSE) %>% tail(3)
+```
+

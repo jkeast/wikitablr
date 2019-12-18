@@ -7,6 +7,9 @@
 #' @export
 
 clean_wiki_names <- function(wiki_table, ...) {
+  #removes all columns without a name
+  wiki_table <- wiki_table[!is.na(names(wiki_table))]
+
   # remove footnotes (which are in brackets) from column names
   names(wiki_table) <- stringr::str_remove_all(names(wiki_table), "\\[.*]")
   # remove "(s)" from column names
@@ -34,7 +37,8 @@ add_na <- function(wiki_table, to_na = "", special_to_na = TRUE){
 
   if(special_to_na){
     #converts solitary special characters to NA
-    wiki_table <- as.data.frame(map(wiki_table, function(x){is.na(x) <- which(stringr::str_detect(x, "\\A[^a-zA-Z0-9]{1}$"));x}))
+    wiki_table <- as.data.frame(map(wiki_table, function(x){is.na(x) <-
+      which(stringr::str_detect(x, "\\A[^a-zA-Z0-9]{1}$")); x}))
   }
 
   return(wiki_table)
@@ -64,9 +68,10 @@ remove_footnotes <- function(wiki_table, ...){
 #' @export
 
 clean_rows <- function(wiki_table){
-
+  #removes all columns without a name
   wiki_table <- wiki_table[!is.na(names(wiki_table))]
 
+  #removes rows with the same value across all columns
   #line of code pulled from Psidom's stack overflow answer here:
   #https://stackoverflow.com/questions/44398252/remove-rows-with-the-same-value-across-all-columns
   wiki_table <- wiki_table[rowSums(wiki_table[-1] != wiki_table[[2]], na.rm = TRUE) != 0,]
@@ -77,11 +82,8 @@ clean_rows <- function(wiki_table){
     tryCatch({i <- 1
 
     while(i <= nrow(wiki_table)){
-      if(length(unique(wiki_table[i,]))==1){
-        wiki_table <- wiki_table[-c(i),]
-        i <- i-1
-      }
 
+      #remove repeats of header in rows
       suppressWarnings(
         if(colnames(wiki_table) == wiki_table[i,]){
           wiki_table <- wiki_table[-c(i),]
@@ -107,10 +109,11 @@ convert_types <- function(wiki_table){
   suppressWarnings(
     wiki_table <- wiki_table %>%
       dplyr::mutate_all(as.character)%>%
-      dplyr::mutate_if(~!testit::has_warning(readr::parse_number(.x)), readr::parse_number)%>%
       dplyr::mutate_if(~all(!is.na(lubridate::dmy(.x))), lubridate::dmy)%>%
       dplyr::mutate_if(~all(!is.na(lubridate::mdy(.x))), lubridate::mdy)%>%
-      dplyr::mutate_if(~all(!is.na(lubridate::ymd(.x))), lubridate::ymd))
+      dplyr::mutate_if(~all(!is.na(lubridate::ymd(.x))), lubridate::ymd)%>%
+      dplyr::mutate_if(~class(.x) == "character" &&
+                         all(!stringr::str_detect(.x, "[a-zA-Z]"), na.rm = TRUE), readr::parse_number))
 
   return(wiki_table)
 
