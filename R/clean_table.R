@@ -37,8 +37,13 @@ add_na <- function(wiki_table, to_na = "", special_to_na = TRUE){
 
   if(special_to_na){
     #converts solitary special characters to NA
-    wiki_table <- as.data.frame(map(wiki_table, function(x){is.na(x) <-
-      which(stringr::str_detect(x, "\\A[^a-zA-Z0-9]{1}$")); x}))
+    wiki_table <- as.data.frame(
+      map(wiki_table, function(x) {
+        is.na(x) <- which(stringr::str_detect(x, "\\A[^a-zA-Z0-9]{1}$"))
+        x
+        }
+      )
+    )
   }
 
   return(wiki_table)

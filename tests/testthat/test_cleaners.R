@@ -29,6 +29,8 @@ dummy_data <- as.data.frame(rbind(c("?", "two", "three"),
 expect_equal(all(is.na(add_na(dummy_data, to_na = "N/A")$V1)), TRUE)
 
 
+
+
 #test convert_types()
 expect_equal(class(convert_types(clean_rows(presidents))$Born), "Date")
 
@@ -36,3 +38,8 @@ expect_equal(class(convert_types(clean_rows(presidents))$Born), "Date")
 #test remove_footnotes()
 #test that footnotes are removed
 expect_equal(all(!stringr::str_detect(remove_footnotes(college)$Founded, "\\[")), TRUE)
+
+
+#test -- natalia
+read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = FALSE, remove_footnotes = FALSE)
+

@@ -20,13 +20,13 @@
 # useful keyboard shortcuts for package authoring: Build and Reload Package: 'Ctrl + Shift + B'
 # Check Package: 'Ctrl + Shift + E' Test Package: 'Ctrl + Shift + T'
 
-read_wiki_table <- function(url, table_number = 1, replace_linebreak = ", ", remove_footnotes = TRUE, to_na = "", special_to_na = TRUE, ...) {
+read_wiki_table <- function(url, table_number = 1, replace_linebreak = ", ", remove_footnotes = TRUE, to_na = "", special_to_na = FALSE, ...) {
 
   wiki_table <- read_wiki_raw(url, table_number, replace_linebreak) %>%
     # removes empty columns this is often necessary for tables that have a columns of images
     clean_wiki_names(...) %>%
     clean_rows() %>%
-    add_na(to_na, special_to_na) %>%
+    add_na(to_na, special_to_na = special_to_na) %>%
     janitor::remove_empty(which = "cols") %>%
     convert_types()
 
