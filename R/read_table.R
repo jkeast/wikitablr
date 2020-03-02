@@ -20,7 +20,27 @@
 # useful keyboard shortcuts for package authoring: Build and Reload Package: 'Ctrl + Shift + B'
 # Check Package: 'Ctrl + Shift + E' Test Package: 'Ctrl + Shift + T'
 
-read_wiki_table <- function(url, table_number = 1, replace_linebreak = ", ", remove_footnotes = TRUE, to_na = "", special_to_na = FALSE, ...) {
+read_wikinodes <- function(url, replace_linebreak = ", ") {
+  # read in html from webpage
+  wiki_nodes <- xml2::read_html(url)
+
+  # replace line breaks in cells with comma
+  comma <- rvest::xml_node(xml2::read_xml(paste("<wiki_table><span>", "</span></wiki_table>", sep = replace_linebreak)),
+                           "span")
+  xml2::xml_add_sibling(rvest::xml_nodes(wiki_table, "br"), comma)
+
+  # extract table from html
+  wiki_nodes <- wiki_table %>%
+    rvest::html_nodes("table.wikitable")
+
+}
+
+
+
+
+
+
+read_wikitable <- function(url, table_number = 1, replace_linebreak = ", ", remove_footnotes = TRUE, to_na = "", special_to_na = FALSE, ...) {
 
   wiki_table <- read_wiki_raw(url, table_number, replace_linebreak) %>%
     # removes empty columns this is often necessary for tables that have a columns of images
@@ -64,7 +84,7 @@ read_all_tables <- function(url, remove_footnotes = TRUE, to_na = "", special_to
   xml2::xml_add_sibling(rvest::xml_nodes(wiki_tables, "br"), comma)
 
   wiki_tables <- wiki_tables %>%
-    rvest::html_nodes("table.wikitable")%>%
+    rvest::html_nodes("")%>%
     map(~ purrr::pluck(.x)) %>%
     map(~ rvest::html_table(.x, fill = TRUE)) %>%
     map(~ clean_rows(.x)) %>%
@@ -107,6 +127,9 @@ read_wiki_raw <- function(url, table_number = 1, replace_linebreak = ", "){
   # extract table from html
   wiki_table <- wiki_table %>%
     rvest::html_nodes("table.wikitable") %>%
+
+  ######above this is read_wikinodes
+
     purrr::pluck(table_number) %>%
     rvest::html_table(fill = TRUE)
 
