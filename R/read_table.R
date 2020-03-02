@@ -30,10 +30,20 @@ read_wikinodes <- function(url, replace_linebreak = ", ") {
   xml2::xml_add_sibling(rvest::xml_nodes(wiki_table, "br"), comma)
 
   # extract table from html
-  wiki_nodes <- wiki_table %>%
+  wiki_nodes <- wiki_nodes %>%
     rvest::html_nodes("table.wikitable")
 
 }
+
+
+read_wikitables <- function(url) {
+  wiki_table <- read_wikinodes(url) %>%
+    rvest::html_table(fill = TRUE)
+
+  return(wiki_table)
+
+}
+
 
 
 
