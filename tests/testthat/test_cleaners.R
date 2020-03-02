@@ -40,14 +40,21 @@ expect_equal(class(convert_types(clean_rows(presidents))$Born), "Date")
 expect_equal(all(!stringr::str_detect(remove_footnotes(college)$Founded, "\\[")), TRUE)
 
 
-#test -- natalia
+
+
+#tests -- natalia
 
 #test that special_to_na = FALSE returns the special character
 expect_equal((read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = FALSE, remove_footnotes = FALSE) %>% filter(dec == "33") %>% pull(glyph)), "!")
 
+
 #test that special_to_na = TRUE returns NA
-expect_equal((read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = TRUE, remove_footnotes = TRUE) %>% filter(dec == "33") %>% pull(glyph)), NA)
+expect_equal((read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = TRUE, remove_footnotes = TRUE) %>% filter(dec == "33") %>% pull(glyph) %>% is.na()), TRUE)
 
-read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = FALSE, remove_footnotes = TRUE)
 
-read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = TRUE, remove_footnotes = FALSE)
+#### THIS is where the error is
+expect_equal((read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = FALSE, remove_footnotes = TRUE) %>% filter(dec == "33") %>% pull(glyph)), "!")
+
+
+#test that special_to_na = TRUE returns NA
+expect_equal((read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = TRUE, remove_footnotes = FALSE) %>% filter(dec == "33") %>% pull(glyph) %>% is.na()), TRUE)
