@@ -2,8 +2,10 @@ Package: wikitablr
 Type: Package
 Title: Simple Reader for Wikipedia's Tables
 Version: 0.1.0
-Author: Jessica Keast
-Maintainer: Jessica Keast <jnkeast@gmail.com>
+Authors@R: as.person(c(
+    "Jessica Keast <jnkeast@gmail.com> [aut, cre]", 
+    "Rose Porta <rporta@smith.edu> [ctb]"
+  ))
 Description: A collection of functions to read in and clean tables from Wikipedia.
 URL: https://github.com/jkeast/wikitablr
 BugReports: https://github.com/jkeast/wikitablr/issues
