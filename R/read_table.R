@@ -20,7 +20,7 @@ read_wikinodes <- function(url, replace_linebreak = ", ", ...) {
   # replace line breaks in cells with comma
   comma <- rvest::xml_node(xml2::read_xml(paste("<wiki_table><span>", "</span></wiki_table>", sep = replace_linebreak)),
                            "span")
-  xml2::xml_add_sibling(rvest::xml_nodes(wiki_table, "br"), comma)
+  xml2::xml_add_sibling(rvest::xml_nodes(wiki_nodes, "br"), comma)
 
   # extract table from html
   wiki_nodes <- wiki_nodes %>%
@@ -40,15 +40,10 @@ read_wikinodes <- function(url, replace_linebreak = ", ", ...) {
 #' @export
 
 read_wikitables <- function(url, ...) {
-  wiki_table <- read_wikinodes(url) %>%
+  wiki_tables <- read_wikinodes(url) %>%
     rvest::html_table(fill = TRUE)
 
-  return(wiki_table)
-
-}
-
-
-read_tables <- function(url, ...) {
+  return(wiki_tables)
 
 }
 

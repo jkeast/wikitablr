@@ -4,15 +4,15 @@
 \alias{clean_wiki_names}
 \title{clean_wiki_names}
 \usage{
-clean_wiki_names(wiki_table, ...)
+clean_wiki_names(wiki_tables, ...)
 }
 \arguments{
-\item{wiki_table}{A dataframe for which the column names will be cleaned}
+\item{wiki_tables}{a list of dataframes for which the column names will be cleaned}
 
 \item{...}{passes arguments to janitor::clean_names()}
 }
 \value{
-Cleaned dataframe
+a list oc cleaned dataframes
 }
 \description{
 clean_wiki_names
