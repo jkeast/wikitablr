@@ -32,7 +32,6 @@ expect_equal(all(is.na(add_na(dummy_data, to_na = "N/A")$V1)), TRUE)
 
 
 
-
 # test convert_types()
 expect_equal(class(convert_types(clean_rows(presidents))$Born), "Date")
 
