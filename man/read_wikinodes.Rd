@@ -2,23 +2,43 @@
 % Please edit documentation in R/read_table.R
 \name{read_wikinodes}
 \alias{read_wikinodes}
+\alias{read_wikitables}
 \title{read_wikinodes}
 \usage{
 read_wikinodes(url, replace_linebreak = ", ", ...)
+
+read_wikitables(url, ...)
 }
 \arguments{
-\item{url}{A character vector of the url of a wikipedia page containing a table. Default is 1.}
+\item{url}{A character vector of the URL of a wikipedia page
+containing a table.}
 
-\item{replace_linebreak}{A character string denoting what linebreaks within dataframe cells are to be replaced with. Default is ' ,'.}
+\item{replace_linebreak}{A character string denoting what
+linebreaks within dataframe cells are to be replaced with.
+Default is \code{' ,'}.}
 
-\item{...}{passes arguments to read_wikitables()}
+\item{...}{arguments passed to \code{\link{read_wikitables}}}
 }
 \value{
-list of xlm nodes
+An \code{xml_nodeset}
+
+A list of tbls
 }
 \description{
 read_wikinodes
 }
 \examples{
+url <- "https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age"
+# returns xml_nodeset
+prez_nodes <- read_wikinodes(url)
+length(prez_nodes)
+url <- "https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age"
+# returns list of tibbles
+prez_tables <- read_wikitables(url)
+length(prez_tables)
+}
+\seealso{
+\code{\link[rvest]{html_nodes}}
 
+\code{\link[rvest]{html_table}}
 }

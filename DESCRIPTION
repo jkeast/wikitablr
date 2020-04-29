@@ -1,10 +1,12 @@
 Package: wikitablr
 Type: Package
 Title: Simple Reader for Wikipedia's Tables
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: as.person(c(
     "Jessica Keast <jnkeast@gmail.com> [aut, cre]", 
-    "Rose Porta <rporta@smith.edu> [ctb]"
+    "Natalia Iannucci [ctb]",
+    "Rose Porta <rporta@smith.edu> [ctb]",
+    "Benjamin S. Baumer [ctb]"
   ))
 Description: A collection of functions to read in and clean tables from Wikipedia.
 URL: https://github.com/jkeast/wikitablr
@@ -22,7 +24,7 @@ Imports:
     readr,
     lubridate,
     testit
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
