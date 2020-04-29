@@ -2,20 +2,27 @@
 % Please edit documentation in R/clean_table.R
 \name{add_na}
 \alias{add_na}
-\title{add_na}
+\alias{add_na_single}
+\title{add_na_single}
 \usage{
+add_na_single(wiki_table, to_na = "", special_to_na = TRUE)
+
 add_na(wiki_tables, to_na = "", special_to_na = TRUE)
 }
 \arguments{
-\item{wiki_tables}{a list of dataframes}
+\item{wiki_table}{A dataframe}
 
 \item{to_na}{A character string that when solitary in a dataframe cell is to be converted to NA. Default is "".}
 
 \item{special_to_na}{A boolean denoting whether solitary special characters in dataframe cells are to be converted to NA. Default is TRUE.}
+
+\item{wiki_tables}{a list of dataframes}
 }
 \value{
+Cleaned dataframe
+
 a list of cleaned dataframes
 }
 \description{
-add_na
+add_na_single
 }
