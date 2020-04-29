@@ -4,12 +4,12 @@
 \alias{remove_footnotes}
 \title{remove_footnotes}
 \usage{
-remove_footnotes(wiki_table, ...)
+remove_footnotes(wiki_tables, ...)
 }
 \arguments{
-\item{wiki_table}{A dataframe}
-
 \item{...}{Passes arguments to add_na()}
+
+\item{wiki_table}{A dataframe}
 }
 \value{
 Cleaned dataframe
