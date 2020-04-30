@@ -9,7 +9,6 @@
 clean_wiki_names <- function(wiki_table, ...) {
   #removes all columns without a name
   wiki_table <- wiki_table[!is.na(names(wiki_table))]
-
   # remove footnotes (which are in brackets) from column names
   names(wiki_table) <- stringr::str_remove_all(names(wiki_table), "\\[.*]")
   # remove "(s)" from column names
