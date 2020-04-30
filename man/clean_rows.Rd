@@ -2,15 +2,22 @@
 % Please edit documentation in R/clean_table.R
 \name{clean_rows}
 \alias{clean_rows}
+\alias{clean_rows_single}
 \title{clean_rows}
 \usage{
-clean_rows(wiki_table)
+clean_rows_single(wiki_table)
+
+clean_rows(wiki_tables)
 }
 \arguments{
 \item{wiki_table}{A dataframe for which the rows will be cleaned}
+
+\item{wiki_tables}{A list of dataframes for which the rows will be cleaned}
 }
 \value{
 Cleaned dataframe
+
+a list of cleaned dataframes
 }
 \description{
 clean_rows

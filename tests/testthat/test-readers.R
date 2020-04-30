@@ -8,32 +8,36 @@ linebreaks <- "https://en.wikipedia.org/wiki/Wikipedia:Advanced_table_formatting
 test_that("read_wiki_raw works", {
   # read_wiki_raw tests
   # Reads first presidents table with all default parameters
-  presidents_raw <- read_wiki_raw(presidents, table_number = 1)
+  presidents_raw <- read_wikitables(presidents) %>%
+    purrr::pluck(1)
 
   # Jessica's test
   # test that output is a dataframe
   expect_is(presidents_raw, "data.frame")
 
   # test that linebreaks in cells are replaced with commas
-  linebreaks_raw <- read_wiki_raw(linebreaks)
+  linebreaks_raw <- read_wikitables(linebreaks) %>%
+    purrr::pluck(1)
   expect_true(linebreaks_raw[, 1] %>%
-                str_detect(",") %>%
+                stringr::str_detect(",") %>%
                 any())
 
   # test that linebreaks in cells are replaced with "/" if replace_linebreak = "/ "
-  presidents_2 <- read_wiki_raw(presidents, table_number = 1, replace_linebreak = "/ ")
+  presidents_2 <- presidents %>%
+    read_wikitables(replace_linebreak = "/ ") %>%
+    purrr::pluck(1)
 
   # test to detect "/" in column 4
   expect_true(presidents_2[, 4] %>%
-                str_detect("/") %>%
+                stringr::str_detect("/") %>%
                 any())
   # test to detect "/" in column 5
   expect_true(presidents_2[, 5] %>%
-                str_detect("/") %>%
+                stringr::str_detect("/") %>%
                 any())
 })
 
-test_that("read_wiki_table works", {
+test_that("read_wikitables works", {
 
   # read_wiki_table tests
 
@@ -186,4 +190,27 @@ test_that("read_all_tables works", {
   presidents_noheader <- presidents_raw %>%
     clean_rows()
   expect_equal(nrow(presidents_noheader), nrow(presidents_clean_1))
+})
+
+
+test_that("natalias tests work", {
+
+  # tests -- natalia
+
+  # test that special_to_na = FALSE returns the special character
+  expect_equal((read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = FALSE, remove_footnotes = FALSE) %>% filter(dec == "33") %>% pull(glyph)), "!")
+
+
+  # test that special_to_na = TRUE returns NA
+  expect_equal((read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = TRUE, remove_footnotes = TRUE) %>% filter(dec == "33") %>% pull(glyph) %>% is.na()), TRUE)
+
+
+  #### THIS is where the error is
+  expect_equal((read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = FALSE, remove_footnotes = TRUE) %>% filter(dec == "33") %>% pull(glyph)), "!")
+
+
+  # test that special_to_na = TRUE returns NA
+  expect_equal((read_wiki_table("https://en.wikipedia.org/wiki/ASCII", table_number = 2, special_to_na = TRUE, remove_footnotes = FALSE) %>% filter(dec == "33") %>% pull(glyph) %>% is.na()), TRUE)
+
+
 })
