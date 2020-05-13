@@ -36,17 +36,17 @@ test_that("cleaners work", {
 
   # test that removes special characters in names
   ## clean_wiki_names won't work with dummy data-- not sure why
-  dummy_data_1 <- tibble::tribble(
+  dummy_data_1 <- list(tibble::tribble(
     ~`first@`, ~second, ~third,
     "?", "two", "three",
     "_", "five", "7",
     "N/A", "ten", "eleven"
-  )
+  ))
 
   expect_false(
     dummy_data_1 %>%
-      # still doesn't work. Why?
       clean_wiki_names() %>%
+      purrr::pluck(1) %>%
       names() %>%
       stringr::str_detect("\\@") %>%
       any()
