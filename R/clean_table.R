@@ -15,7 +15,8 @@ clean_wiki_names_single <- function(wiki_table, ...) {
   # remove special characters from column names
   names(wiki_table) <- stringr::str_replace_all(names(wiki_table), "[^a-zA-Z0-9 ]", "_")
   # convert to snake case
-  wiki_table <- wiki_table %>% janitor::clean_names(...)
+  wiki_table <- wiki_table %>%
+    janitor::clean_names(...)
 
   return(wiki_table)
 }
@@ -40,7 +41,7 @@ clean_wiki_names <- function(wiki_tables, ...) {
 
 add_na_single <- function(wiki_table, to_na = "", special_to_na = TRUE){
   #converts specified characters to NA
-  wiki_table <- as.data.frame(map(wiki_table, function(x){is.na(x) <- which(x %in% c("", to_na));x}))
+  wiki_table <- as.data.frame(purrr::map(wiki_table, function(x){is.na(x) <- which(x %in% c("", to_na));x}))
 
   if(special_to_na){
     #converts solitary special characters to NA
@@ -129,7 +130,7 @@ clean_rows_single <- function(wiki_table) {
 #' @export
 
 clean_rows <- function(wiki_tables) {
-  purrr::map(wiki_tables)
+  purrr::map(wiki_tables, clean_rows_single)
 }
 
 

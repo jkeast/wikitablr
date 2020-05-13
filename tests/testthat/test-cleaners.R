@@ -12,7 +12,8 @@ test_that("cleaners work", {
   # test that column names clean as expected
   vars <- c("school", "location", "control", "type", "enrollment", "founded", "accreditation")
   clean_college <- clean_wiki_names(college)
-  clean_college1 <- clean_college %>% purrr::pluck(1)
+  clean_college1 <- clean_college %>%
+    purrr::pluck(1)
   expect_equal(names(clean_college1), vars)
 
   # test that correctly passes arguments to janitor::clean_names()
@@ -38,25 +39,35 @@ test_that("cleaners work", {
   dummy_data_1 <- tibble::tribble(
     ~`first@`, ~second, ~third,
     "?", "two", "three",
-    "_", "five", 7,
+    "_", "five", "7",
     "N/A", "ten", "eleven"
   )
 
-  expect_false(clean_wiki_names(dummy_data_1) %>%
-                 purrr::pluck(1) %>%
-                 pull(first) %>%
-                 stringr::str_detect("\\@") %>%
-                 any())
+  expect_false(
+    dummy_data_1 %>%
+      # still doesn't work. Why?
+      clean_wiki_names() %>%
+      names() %>%
+      stringr::str_detect("\\@") %>%
+      any()
+  )
 
   # test clean_rows()
   # test that duplicate of header is removed (this one has a double header)
-  # ERROR: Error in as_mapper(.f, ...) : argument ".f" is missing, with no default
-  presidents1 <- presidents %>% purrr::pluck(1)
-  expect_lt(nrow(clean_rows(presidents1)), nrow(presidents1))
+  expect_lt(
+    presidents %>%
+      clean_rows() %>%
+      purrr::pluck(1) %>%
+      nrow(),
+    presidents %>%
+      purrr::pluck(1) %>%
+      nrow()
+  )
 
   # test that rows with same values in all column are removed
   ## read_wikitables not working for marvel page
-  marvel1 <- marvel %>%  purrr::pluck(1)
+  marvel1 <- marvel %>%
+    purrr::pluck(1)
   expect_lt(nrow(clean_rows(marvel1)), nrow(marvel1))
 
   # test add_na()
@@ -65,7 +76,7 @@ test_that("cleaners work", {
   dummy_data <- tibble::tribble(
     ~first, ~second, ~third,
     "?", "two", "three",
-    "_", "five", 7,
+    "_", "five", "7",
     "N/A", "ten", "eleven"
   )
 
@@ -76,13 +87,13 @@ test_that("cleaners work", {
   # see if first column is converted to NA
   expect_true(dummy_data %>%
                 add_na(to_na = "N/A") %>%
-                pull(first) %>%
+                dplyr::pull(first) %>%
                 is.na() %>%
                 all())
 
   # test for special_to_na = FALSE-- doesn't work
   expect_true(add_na(dummy_data, special_to_na = FALSE)[, 1] %>%
-    str_detect("\\?") %>%
+    stringr::str_detect("\\?") %>%
     any(na.rm = TRUE))
 
   # test convert_types()
