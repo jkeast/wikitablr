@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 ```{r setup, include=FALSE}
 library(wikitablr)
 library(dplyr)
+library(purrr)
 library(stringr)
 ```
 
@@ -30,7 +31,9 @@ There is much conjunction within these categories, and there are functions that 
 ```{r}
 #for this vignette I will be using the wikipedia page of Bob's Burgers episodes
 #this is a table of all episodes in season 10
-read_wiki_table("https://en.wikipedia.org/wiki/List_of_Bob%27s_Burgers_episodes", table_number = 11) %>% head(3)
+read_wikitables("https://en.wikipedia.org/wiki/List_of_Bob%27s_Burgers_episodes") %>%
+  pluck(11) %>% 
+  head(3)
 ```
 
 
@@ -39,7 +42,8 @@ However, users do have the option to read and clean their table seperately. In t
 A table can be read in without cleaning using `read_wiki_raw()`.
 
 ```{r}
-episodes <- read_wiki_raw("https://en.wikipedia.org/wiki/List_of_Bob%27s_Burgers_episodes", 11)
+episodes <- read_wikitables("https://en.wikipedia.org/wiki/List_of_Bob%27s_Burgers_episodes") %>%
+  pluck(11)
 head(episodes, 3)
 ```
 
@@ -50,22 +54,22 @@ head(episodes, 3)
 Here, we look at the column names of the uncleaned data:
 
 ```{r}
-colnames(episodes)
+names(episodes)
 ```
 
 And compare it to the cleaned column names.
 
 ```{r}
 episodes <- clean_wiki_names(episodes)
-colnames(episodes)
+names(episodes)
 ```
 
 
 #### Add NAs to data
-`add_na()` takes blank cells, solitary special characters, and any designated string, and converts them to `r NA`. This can be utilized on the table for Bob's Burgers' current season, which has some "TBA" and "TBD" values for unreleased episodes. Using `add_na()` we can convert these to `r NA`:
+`add_na()` takes blank cells, solitary special characters, and any designated string, and converts them to `NA`. This can be utilized on the table for Bob's Burgers' current season, which has some "TBA" and "TBD" values for unreleased episodes. Using `add_na()` we can convert these to `r NA`:
 
 ```{r}
-episodes <- add_na(episodes, to_na = c("TBA", "TBD"))
+episodes <- special_to_na(episodes, to_na = c("TBA", "TBD"))
 
 tail(episodes, 3)
 ```
