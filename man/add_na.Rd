@@ -3,14 +3,20 @@
 \name{add_na}
 \alias{add_na}
 \alias{add_na_single}
+\alias{special_to_na_single}
+\alias{special_to_na}
 \title{add_na_single}
 \usage{
 add_na_single(wiki_table, to_na = "", special_to_na = TRUE)
 
 add_na(wiki_tables, to_na = "", special_to_na = TRUE)
+
+special_to_na_single(wiki_table)
+
+special_to_na(wiki_tables)
 }
 \arguments{
-\item{wiki_table}{A dataframe}
+\item{wiki_table}{a dataframe}
 
 \item{to_na}{A character string that when solitary in a dataframe cell is to be converted to NA. Default is "".}
 
@@ -20,6 +26,10 @@ add_na(wiki_tables, to_na = "", special_to_na = TRUE)
 }
 \value{
 Cleaned dataframe
+
+a list of cleaned dataframes
+
+a cleaned dataframe
 
 a list of cleaned dataframes
 }

@@ -66,6 +66,31 @@ add_na <- function(wiki_tables, to_na = "", special_to_na = TRUE) {
   purrr::map(wiki_tables, add_na_single)
 }
 
+#' @rdname add_na
+#' @param wiki_table a dataframe
+#' @return a cleaned dataframe
+#' @export
+
+special_to_na_single <- function(wiki_table) {
+  wiki_table %>%
+    dplyr::mutate_if(
+      is.character, stringr::str_replace_all,
+      pattern = "\\A[^a-zA-Z0-9]{1}$", replacement = "<special_char/>"
+    ) %>%
+    dplyr::mutate_if(
+      is.character, list(~dplyr::na_if(., "<special_char/>"))
+    )
+}
+
+#' @rdname add_na
+#' @param wiki_tables a list of dataframes
+#' @return a list of cleaned dataframes
+#' @export
+
+special_to_na <- function(wiki_tables) {
+  purrr::map(wiki_tables, special_to_na_single)
+}
+
 
 #' @name remove_footnotes
 #' @title remove_footnotes

@@ -106,3 +106,100 @@ test_that("cleaners work", {
   # 'x' must be an array of at least two dimensions
   expect_true(all(!stringr::str_detect(remove_footnotes(college) %>% purrr::pluck(1)$Founded, "\\[")))
 })
+
+
+test_that("special_to_na works", {
+  ascii_table <- read_wikitables("https://en.wikipedia.org/wiki/ASCII") %>%
+    clean_wiki_names() %>%
+    purrr::pluck(2)
+
+  # test that special_to_na = FALSE returns the special character
+  expect_false(
+    ascii_table %>%
+      dplyr::filter(dec == "33") %>%
+      dplyr::pull(glyph) %>%
+      is.na() %>%
+      any()
+  )
+  expect_true(
+    ascii_table %>%
+      special_to_na_single() %>%
+      dplyr::filter(dec == "33") %>%
+      dplyr::pull(glyph) %>%
+      is.na() %>%
+      any()
+  )
+})
+
+
+test_that("clean_rows works", {
+  # Reads and cleans presidents tables with all default parameters
+  presidents_raw <- read_wikitables(presidents)
+  presidents_clean <- clean_rows(presidents_raw)
+
+  # test that clean_rows() removes double header PASSES TEST
+  expect_equal(
+    nrow(presidents_clean[[1]]),
+    nrow(presidents_raw[[1]]) - 3
+  )
+  expect_equal(
+    nrow(presidents_clean[[2]]),
+    nrow(presidents_raw[[2]]) - 1
+  )
+
+})
+
+
+
+test_that("old cleaners work", {
+  skip("Skipping old and possibly meaningless cleaner tests")
+  ## I think all tests below this point should either be restructured and moved to test-cleaners
+  ## or removed completely
+
+  # remove_footnotes = TRUE -- not sure why this isn't working
+  expect_false(presidents_clean[, 3] %>%
+                 stringr::str_detect("\\[a\\]") %>%
+                 any())
+
+  # remove_footnotes = FALSE
+  presidents_clean_footnotes <- read_wiki_table(presidents, remove_footnotes = FALSE)
+  expect_true(presidents_clean_footnotes[, 3] %>%
+                stringr::str_detect("[\\[a\\]]") %>%
+                any())
+
+  # to_na = "George Washington"
+  presidents_clean_na <- read_wiki_table(presidents, to_na = "George Washington")
+  # test to detect "George Washington" in column 2-- should be false
+  expect_false(presidents_clean_na[, 2] %>%
+                 stringr::str_detect("George Washington") %>%
+                 any(na.rm = TRUE))
+
+  # special_to_na = TRUE
+  expect_false(colleges_clean[, 5] %>%
+                 stringr::str_detect("—") %>%
+                 any(na.rm = TRUE))
+
+  # special_to_na = FALSE Doesn't work
+  colleges_3 <- read_wiki_table(colleges, table_number = 3, special_to_na = FALSE)
+  # test to detect "-" in column 5 (there should be one) FAILS TEST
+  expect_true(colleges_3[, 5] %>%
+                stringr::str_detect("—") %>%
+                any(na.rm = TRUE))
+
+  # test that clean_rows() removes double header FAILS TEST
+  presidents_raw <- read_wiki_raw(presidents)
+  expect_lt(nrow(presidents_clean), nrow(presidents_raw))
+
+  # Another test for the same thing
+  presidents_noheader <- presidents_raw %>%
+    clean_rows()
+  expect_equal(nrow(presidents_noheader), nrow(presidents_clean))
+
+  # Jessica's tests
+  # test that structure of dataframes from both readers is the same
+  # I suspect that this test should not always work based on the above two tests
+  expect_identical(dim(presidents_clean), dim(presidents_raw))
+
+  # test that structure of data is the same, regardless of whether I remove footnotes
+  expect_equal(names(presidents_clean), names(presidents_clean_footnotes))
+})

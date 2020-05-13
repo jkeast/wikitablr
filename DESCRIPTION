@@ -1,7 +1,7 @@
 Package: wikitablr
 Type: Package
 Title: Simple Reader for Wikipedia's Tables
-Version: 0.1.0.9001
+Version: 0.1.0.9002
 Authors@R: as.person(c(
     "Jessica Keast <jnkeast@gmail.com> [aut, cre]", 
     "Natalia Iannucci [ctb]",
