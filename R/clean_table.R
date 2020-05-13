@@ -27,7 +27,7 @@ clean_wiki_names_single <- function(wiki_table, ...) {
 #' @export
 
 clean_wiki_names <- function(wiki_tables, ...) {
-  map(wiki_tables, clean_wiki_names_single, ... = ...)
+  purrr::map(wiki_tables, clean_wiki_names_single, ... = ...)
 }
 
 
@@ -45,7 +45,7 @@ add_na_single <- function(wiki_table, to_na = "", special_to_na = TRUE){
   if(special_to_na){
     #converts solitary special characters to NA
     wiki_table <- as.data.frame(
-      map(wiki_table, function(x) {
+      purrr::map(wiki_table, function(x) {
         is.na(x) <- which(stringr::str_detect(x, "\\A[^a-zA-Z0-9]{1}$"))
         x
         }
@@ -62,7 +62,7 @@ add_na_single <- function(wiki_table, to_na = "", special_to_na = TRUE){
 #' @export
 
 add_na <- function(wiki_tables, to_na = "", special_to_na = TRUE) {
-  map(wiki_tables, add_na_single)
+  purrr::map(wiki_tables, add_na_single)
 }
 
 
@@ -85,7 +85,7 @@ remove_footnotes_single <- function(wiki_table, ...){
 #' @export
 
 remove_footnotes <- function(wiki_tables, ...) {
-  map(wiki_tables, remove_footnotes_single, ...)
+  purrr::map(wiki_tables, remove_footnotes_single, ...)
 }
 
 #' @name clean_rows
@@ -129,7 +129,7 @@ clean_rows_single <- function(wiki_table) {
 #' @export
 
 clean_rows <- function(wiki_tables) {
-  map(wiki_tables)
+  purrr::map(wiki_tables)
 }
 
 
@@ -158,5 +158,5 @@ convert_types_single <- function(wiki_table) {
 #' @return a list of cleaned dataframes
 #' @export
 convert_types <- function(wiki_tables) {
-  map(wiki_tables, convert_types_single)
+  purrr::map(wiki_tables, convert_types_single)
 }
