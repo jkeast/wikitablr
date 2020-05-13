@@ -5,29 +5,31 @@ presidents <- "https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_St
 
 linebreaks <- "https://en.wikipedia.org/wiki/Wikipedia:Advanced_table_formatting"
 
-test_that("read_wiki_raw works", {
+test_that("read_wikinodes works", {
   # read_wiki_raw tests
   # Reads first presidents table with all default parameters
-  presidents_raw <- read_wikitables(presidents) %>%
+  presidents_raw <- read_wikinodes(presidents) %>%
     purrr::pluck(1)
 
-  # Jessica's test
-  # test that output is a dataframe
-  expect_is(presidents_raw, "data.frame")
+  # test that each item is a list
+  expect_is(presidents_raw[1], "list")
 
   # test that linebreaks in cells are replaced with commas
-  linebreaks_raw <- read_wikitables(linebreaks) %>%
+  # error incorrect number of dimensions-- I think this is because it
+  # isn't a dataframe yet?
+  linebreaks_raw <- read_wikinodes(linebreaks) %>%
     purrr::pluck(1)
-  expect_true(linebreaks_raw[, 1] %>%
+  expect_true(linebreaks_raw[,1] %>%
                 stringr::str_detect(",") %>%
                 any())
 
   # test that linebreaks in cells are replaced with "/" if replace_linebreak = "/ "
   presidents_2 <- presidents %>%
-    read_wikitables(replace_linebreak = "/ ") %>%
+    read_wikinodes(replace_linebreak = "/ ") %>%
     purrr::pluck(1)
 
   # test to detect "/" in column 4
+  # incorrect number of dimensions
   expect_true(presidents_2[, 4] %>%
                 stringr::str_detect("/") %>%
                 any())
@@ -39,29 +41,36 @@ test_that("read_wiki_raw works", {
 
 test_that("read_wikitables works", {
 
-  # read_wiki_table tests
+  # reads colleges tables with all default parameters
+  colleges_clean <- read_wikitables(colleges)
 
-  # reads and cleans presidents table 1 with all default parameters
+  # linebreaks table
+  linebreaks_table <- read_wikitables(linebreaks) %>%
+    purrr::pluck(1)
 
-  # reads and cleans colleges table 3 with all default parameters
-  colleges_clean <- read_wiki_table(colleges, table_number = 3)
+  # test that read_wikitables returns a list
+  expect_is(colleges_clean, "list")
+
+  # test that each item in the list is a data frame
+  expect_is(colleges_clean %>% purrr::pluck(1), "data.frame")
 
   # replace_linebreak = ", " (default)
-  expect_true(read_wiki_table(linebreaks)[, 1] %>%
+  expect_true(linebreaks_table[, 1] %>%
                 str_detect(",") %>%
                 any())
 
   # replace_linebreak = "/ "
-  presidents_clean_2 <- read_wiki_table(presidents, replace_linebreak = "/ ")
+  linebreaks_table2 <- read_wikitables(linebreaks, replace_linebreak = "/ ") %>%
+    purrr::pluck(1)
 
-  # test to detect "/" in column 4
-  expect_true(presidents_clean_2[, 4] %>%
+  # test to detect "/" in column 1
+  # FAILS
+  expect_true(linebreaks_table2[, 1] %>%
                 str_detect("/") %>%
                 any())
-  # test to detect "/" in column 5
-  expect_true(presidents_clean_2[, 5] %>%
-                str_detect("/") %>%
-                any())
+
+  ## I think all tests below this point should either be restructured and moved to test-cleaners
+  ## or removed completely
 
   # remove_footnotes = TRUE -- not sure why this isn't working
   expect_false(presidents_clean[, 3] %>%
