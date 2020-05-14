@@ -10,6 +10,7 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  eval = FALSE,
   comment = "#>"
 )
 ```
@@ -72,7 +73,7 @@ names(episodes)
 episodes <- special_to_na(episodes, to_na = c("TBA", "TBD"))
 
 tail(episodes, 3)
-```
+  ```
 
 #### Remove footnotes
 `remove_footnotes()` does just that! Wikipedia's footnotes are contained within brackets ([ ]), so this function removes anything contained in brackets (as well as the brackets themselves) from the data.
