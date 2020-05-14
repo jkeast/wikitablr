@@ -16,13 +16,14 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     dplyr,
-    rvest,
     janitor,
-    stringr,
+    lubridate,
     purrr,
-    xml2,
     readr,
-    lubridate
+    rvest,
+    stringr,
+    tibble,
+    xml2
 RoxygenNote: 7.1.0
 Suggests: 
     testthat (>= 2.1.0),
