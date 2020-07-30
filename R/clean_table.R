@@ -69,7 +69,6 @@ add_na <- function(wiki_tables, to_na = "", special_to_na = TRUE) {
 #' @rdname add_na
 #' @param wiki_table a dataframe
 #' @return a cleaned dataframe
-#' @export
 
 special_to_na_single <- function(wiki_table) {
   wiki_table %>%
