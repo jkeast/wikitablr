@@ -7,7 +7,10 @@ Authors@R: c(
     person("Natalia", "Iannucci", email = "iannuccinatalia@gmail.com", role = c("aut", "ctb"), comment = c(ORCID = "0000-0001-5663-1731")),
     person("Rose", "Porta", email = "rporta@smith.edu", role = c("ctb"))
   )
-Description: A collection of functions to read in and clean tables from Wikipedia.
+Description: A collection of functions to read in and clean tables from Wikipedia. It allows any Wikipedia table to be 
+read into R so that it can then be used as a typical R dataframe and manipulated as such. It also cleans up the dataframes 
+so that they are able to be used with tidyverse functions. This package allows for many more datasets to be used in R so that
+users can explore data on any subject they desire, while cleaning the dataframes to avoid issues.
 URL: https://github.com/jkeast/wikitablr
 BugReports: https://github.com/jkeast/wikitablr/issues
 License: MIT + file LICENSE
