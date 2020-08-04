@@ -44,6 +44,18 @@ read_wikinodes <- function(url, replace_linebreak = ", ", ...) {
 
 read_wikitables <- function(url, ...) {
   read_wikinodes(url) %>%
-    rvest::html_table(fill = TRUE)
+  tryCatch(
+    expr = {
+      rvest::html_table(fill = TRUE)
+    },
+    error = function(e){
+      message('Caught an error!')
+      print(e)
+    },
+    warning = function(w){
+      message('Caught a warning!')
+      print(w)
+    }
+  )
 }
 
