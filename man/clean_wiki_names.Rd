@@ -2,17 +2,24 @@
 % Please edit documentation in R/clean_table.R
 \name{clean_wiki_names}
 \alias{clean_wiki_names}
+\alias{clean_wiki_names_single}
 \title{clean_wiki_names}
 \usage{
+clean_wiki_names_single(wiki_table, ...)
+
 clean_wiki_names(wiki_tables, ...)
 }
 \arguments{
-\item{wiki_tables}{a list of dataframes for which the column names will be cleaned}
+\item{wiki_table}{A dataframe for which the column names will be cleaned}
 
-\item{...}{passes arguments to janitor::clean_names()}
+\item{...}{arguments passed to \code{\link[janitor]{clean_names}}}
+
+\item{wiki_tables}{a list of dataframes for which the column names will be cleaned}
 }
 \value{
-a list oc cleaned dataframes
+a cleaned dataframe
+
+a list of cleaned dataframes
 }
 \description{
 clean_wiki_names

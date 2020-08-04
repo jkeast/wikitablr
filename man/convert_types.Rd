@@ -2,14 +2,21 @@
 % Please edit documentation in R/clean_table.R
 \name{convert_types}
 \alias{convert_types}
+\alias{convert_types_single}
 \title{convert_types}
 \usage{
+convert_types_single(wiki_table)
+
 convert_types(wiki_tables)
 }
 \arguments{
-\item{wiki_table}{A list of dataframes for which the rows will be cleaned}
+\item{wiki_table}{A dataframe for which the rows will be cleaned}
+
+\item{wiki_tables}{A list of dataframes for which the rows will be cleaned}
 }
 \value{
+Cleaned dataframe
+
 a list of cleaned dataframes
 }
 \description{

@@ -1,14 +1,13 @@
-#' @name clean_wiki_names_single
-#' @title clean_wiki_names_single
+#' @name clean_wiki_names
+#' @title clean_wiki_names
 #' @importFrom dplyr %>%
 #' @param wiki_table A dataframe for which the column names will be cleaned
-#' @param ... passes arguments to janitor::clean_names()
+#' @param ... arguments passed to \code{\link[janitor]{clean_names}}
 #' @return a cleaned dataframe
 
 clean_wiki_names_single <- function(wiki_table, ...) {
   #removes all columns without a name
   wiki_table <- wiki_table[!is.na(names(wiki_table))]
-
   # remove footnotes (which are in brackets) from column names
   names(wiki_table) <- stringr::str_remove_all(names(wiki_table), "\\[.*]")
   # remove "(s)" from column names
@@ -16,30 +15,24 @@ clean_wiki_names_single <- function(wiki_table, ...) {
   # remove special characters from column names
   names(wiki_table) <- stringr::str_replace_all(names(wiki_table), "[^a-zA-Z0-9 ]", "_")
   # convert to snake case
-  wiki_table <- wiki_table %>% janitor::clean_names(...)
+  wiki_table <- wiki_table %>%
+    janitor::clean_names(...)
 
   return(wiki_table)
 }
 
 
-#' @name clean_wiki_names
-#' @title clean_wiki_names
-#' @importFrom dplyr %>%
-#' @importFrom  purrr map
+#' @rdname clean_wiki_names
 #' @param wiki_tables a list of dataframes for which the column names will be cleaned
-#' @param ... passes arguments to janitor::clean_names()
-#' @return a list oc cleaned dataframes
+#' @return a list of cleaned dataframes
 #' @export
 
 clean_wiki_names <- function(wiki_tables, ...) {
-  clean_names_list <- map(wiki_tables, clean_wiki_names_single)
-
-  return(clean_names_list)
+  purrr::map(wiki_tables, clean_wiki_names_single, ... = ...)
 }
 
 
-
-#' @name add_na_single
+#' @name add_na
 #' @title add_na_single
 #' @param wiki_table A dataframe
 #' @param to_na A character string that when solitary in a dataframe cell is to be converted to NA. Default is "".
@@ -48,12 +41,12 @@ clean_wiki_names <- function(wiki_tables, ...) {
 
 add_na_single <- function(wiki_table, to_na = "", special_to_na = TRUE){
   #converts specified characters to NA
-  wiki_table <- as.data.frame(map(wiki_table, function(x){is.na(x) <- which(x %in% c("", to_na));x}))
+  wiki_table <- as.data.frame(purrr::map(wiki_table, function(x){is.na(x) <- which(x %in% c("", to_na));x}))
 
   if(special_to_na){
     #converts solitary special characters to NA
     wiki_table <- as.data.frame(
-      map(wiki_table, function(x) {
+      purrr::map(wiki_table, function(x) {
         is.na(x) <- which(stringr::str_detect(x, "\\A[^a-zA-Z0-9]{1}$"))
         x
         }
@@ -64,55 +57,68 @@ add_na_single <- function(wiki_table, to_na = "", special_to_na = TRUE){
   return(wiki_table)
 }
 
-#' @name add_na
-#' @title add_na
+#' @rdname add_na
 #' @param wiki_tables a list of dataframes
-#' @param to_na A character string that when solitary in a dataframe cell is to be converted to NA. Default is "".
-#' @param special_to_na A boolean denoting whether solitary special characters in dataframe cells are to be converted to NA. Default is TRUE.
 #' @return a list of cleaned dataframes
 #' @export
 
-add_na <- function(wiki_tables, to_na = "", special_to_na = TRUE){
-  add_na_list <- map(wiki_tables, add_na_single)
+add_na <- function(wiki_tables, to_na = "", special_to_na = TRUE) {
+  purrr::map(wiki_tables, add_na_single)
+}
 
-  return(add_na_list)
+#' @rdname add_na
+#' @param wiki_table a dataframe
+#' @return a cleaned dataframe
+
+special_to_na_single <- function(wiki_table) {
+  wiki_table %>%
+    dplyr::mutate_if(
+      is.character, stringr::str_replace_all,
+      pattern = "\\A[^a-zA-Z0-9]{1}$", replacement = "<special_char/>"
+    ) %>%
+    dplyr::mutate_if(
+      is.character, list(~dplyr::na_if(., "<special_char/>"))
+    )
+}
+
+#' @rdname add_na
+#' @param wiki_tables a list of dataframes
+#' @return a list of cleaned dataframes
+#' @export
+
+special_to_na <- function(wiki_tables) {
+  purrr::map(wiki_tables, special_to_na_single)
 }
 
 
-#' @name remove_footnotes_single
-#' @title remove_footnotes_single
+#' @name remove_footnotes
+#' @title remove_footnotes
 #' @param wiki_table a dataframe
-#' @param ... Passes arguments to add_na()
+#' @param ... arguments passed to \code{\link{add_na}}
 #' @return a cleaned dataframe
 
 remove_footnotes_single <- function(wiki_table, ...){
-  wiki_table <- as.data.frame(purrr::map(wiki_table, ~stringr::str_remove_all(.x, "\\[.*]"))) %>%
+  as.data.frame(purrr::map(wiki_table, ~stringr::str_remove_all(.x, "\\[.*]"))) %>%
     add_na(...) %>%
     janitor::remove_empty(which = "cols")
-
-  return(wiki_table)
 }
 
 #' @name remove_footnotes
 #' @title remove_footnotes
-#' @param wiki_table A dataframe
-#' @param ... Passes arguments to add_na()
+#' @param wiki_tables A list of dataframes
 #' @return Cleaned dataframe
 #' @export
 
-remove_footnotes <- function(wiki_tables, ...){
-  remove_footnotes_list <- map(wiki_tables, remove_footnotes_single)
-
-  return(remove_footnotes_list)
+remove_footnotes <- function(wiki_tables, ...) {
+  purrr::map(wiki_tables, remove_footnotes_single, ...)
 }
 
-#' @name clean_rows_single
-#' @title clean_rows_single
-#' @importFrom dplyr %>%
+#' @name clean_rows
+#' @title clean_rows
 #' @param wiki_table A dataframe for which the rows will be cleaned
 #' @return Cleaned dataframe
 
-clean_rows_single <- function(wiki_table){
+clean_rows_single <- function(wiki_table) {
   #removes all columns without a name
   wiki_table <- wiki_table[!is.na(names(wiki_table))]
 
@@ -142,27 +148,22 @@ clean_rows_single <- function(wiki_table){
   return(wiki_table)
 }
 
-#' @name clean_rows
-#' @title clean_rows
-#' @importFrom dplyr %>%
-#' @param wiki_table A list of dataframes for which the rows will be cleaned
+#' @rdname clean_rows
+#' @param wiki_tables A list of dataframes for which the rows will be cleaned
 #' @return a list of cleaned dataframes
 #' @export
 
-clean_rows <- function(wiki_tables){
-  clean_rows_list <- map(wiki_tables)
-
-  return(clean_rows_list)
+clean_rows <- function(wiki_tables) {
+  purrr::map(wiki_tables, clean_rows_single)
 }
 
 
-#' @name convert_types_single
-#' @title convert_types_single
-#' @importFrom dplyr %>%
+#' @name convert_types
+#' @title convert_types
 #' @param wiki_table A dataframe for which the rows will be cleaned
 #' @return Cleaned dataframe
 
-convert_types_single <- function(wiki_table){
+convert_types_single <- function(wiki_table) {
   suppressWarnings(
     wiki_table <- wiki_table %>%
       dplyr::mutate_all(as.character)%>%
@@ -177,15 +178,10 @@ convert_types_single <- function(wiki_table){
 }
 
 
-#' @name convert_types
-#' @title convert_types
-#' @importFrom dplyr %>%
-#' @param wiki_table A list of dataframes for which the rows will be cleaned
+#' @rdname convert_types
+#' @param wiki_tables A list of dataframes for which the rows will be cleaned
 #' @return a list of cleaned dataframes
 #' @export
-convert_types <- function(wiki_tables){
-  convert_types_list <- map(wiki_tables, convert_types_single)
-
-  return(convert_types_list)
-
+convert_types <- function(wiki_tables) {
+  purrr::map(wiki_tables, convert_types_single)
 }
