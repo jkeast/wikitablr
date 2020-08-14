@@ -11,7 +11,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-3279-0516"))
   )
 Description: A collection of functions to read in and clean tables from Wikipedia. 
-It allows any Wikipedia table to be read into R so that it can then be used 
+    It allows any Wikipedia table to be read into R so that it can then be used 
     as a typical R dataframe and manipulated as such. It also cleans up the 
     dataframes so that they are able to be used with tidyverse functions. 
     This package allows for many more datasets to be used in R so that users 
