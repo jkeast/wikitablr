@@ -17,7 +17,6 @@ Description: A collection of functions to read in and clean tables from Wikipedi
     This package allows for many more datasets to be used in R so that users 
     can explore data on any subject they desire, while cleaning the 
     dataframes to avoid issues.
-
 URL: https://github.com/jkeast/wikitablr
 BugReports: https://github.com/jkeast/wikitablr/issues
 License: MIT + file LICENSE
