@@ -59,3 +59,33 @@ read_wikitables <- function(url, ...) {
   )
 }
 
+#' @rdname read_wikinodes
+#' @export
+#' @examples
+#' url <- "https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age"
+#' raw <- read_wikitables2(url)
+#' # pick out the biggest table
+#' if (require(dplyr) && require(purrr)) {
+#'   raw %>%
+#'     arrange(desc(bytes)) %>%
+#'     head(1) %>%
+#'     pull(table) %>%
+#'     purrr::pluck(1)
+#'  }
+
+read_wikitables2 <- function(url, ...) {
+  raw <- read_wikinodes(url)
+  out <- rvest::html_attrs(raw) %>%
+    dplyr::bind_rows()
+  out$table <- raw %>%
+    rvest::html_table(fill = TRUE)
+  out %>%
+    dplyr::mutate(
+      number = dplyr::row_number(),
+      retrieved = Sys.time(),
+      bytes = purrr::map(table, lobstr::obj_size),
+      bytes = purrr::map_dbl(bytes, as.numeric)
+    )
+}
+
+globalVariables(c("bytes"))

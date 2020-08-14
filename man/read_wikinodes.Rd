@@ -3,11 +3,14 @@
 \name{read_wikinodes}
 \alias{read_wikinodes}
 \alias{read_wikitables}
+\alias{read_wikitables2}
 \title{read_wikinodes}
 \usage{
 read_wikinodes(url, replace_linebreak = ", ", ...)
 
 read_wikitables(url, ...)
+
+read_wikitables2(url, ...)
 }
 \arguments{
 \item{url}{A character vector of the URL of a wikipedia page
@@ -36,6 +39,16 @@ url <- "https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by
 # returns list of tibbles
 prez_tables <- read_wikitables(url)
 length(prez_tables)
+url <- "https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age"
+raw <- read_wikitables2(url)
+# pick out the biggest table
+if (require(dplyr) && require(purrr)) {
+  raw \%>\%
+    arrange(desc(bytes)) \%>\%
+    head(1) \%>\%
+    pull(table) \%>\%
+    purrr::pluck(1)
+ }
 }
 \seealso{
 \code{\link[rvest]{html_nodes}}
