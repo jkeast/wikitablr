@@ -4,18 +4,20 @@ Title: Simple Reader for Wikipedia's Tables
 Version: 0.1.0.9003
 Authors@R: c(
   person("Jessica", "Keast", email = "jnkeast@gmail.com", role = c("aut", "cre")), 
-  person("Natalia", "Iannucci", email = "iannuccinatalia@gmail.com", role = c("aut", "ctb"), comment = c(ORCID = "0000-0001-5663-1731")),
+  person("Natalia", "Iannucci", email = "iannuccinatalia@gmail.com", 
+         role = c("aut", "ctb"), comment = c(ORCID = "0000-0001-5663-1731")),
   person("Rose", "Porta", role = "ctb"),
   person("Benjamin S.", "Baumer", role = "ctb", 
            comment = c(ORCID = "0000-0002-3279-0516"))
   )
 Description: A collection of functions to read in and clean tables from Wikipedia. 
-    It allows any Wikipedia table to be read into R so that it can then be used 
+It allows any Wikipedia table to be read into R so that it can then be used 
     as a typical R dataframe and manipulated as such. It also cleans up the 
     dataframes so that they are able to be used with tidyverse functions. 
     This package allows for many more datasets to be used in R so that users 
     can explore data on any subject they desire, while cleaning the 
     dataframes to avoid issues.
+
 URL: https://github.com/jkeast/wikitablr
 BugReports: https://github.com/jkeast/wikitablr/issues
 License: MIT + file LICENSE
@@ -24,6 +26,7 @@ LazyData: true
 Imports: 
     dplyr,
     janitor,
+    lobstr,
     lubridate,
     purrr,
     readr,
