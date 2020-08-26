@@ -38,7 +38,7 @@ read_wikinodes <- function(url, replace_linebreak = ", ", ...) {
 #' @export
 #' @examples
 #' url <- "https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age"
-#' raw <- read_wikitables2(url)
+#' raw <- read_wikitables(url)
 #' # pick out the biggest table
 #' if (require(dplyr) && require(purrr)) {
 #'   raw %>%
