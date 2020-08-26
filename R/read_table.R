@@ -28,38 +28,13 @@ read_wikinodes <- function(url, replace_linebreak = ", ", ...) {
   # extract table from html
   wiki_nodes %>%
     rvest::html_nodes("table.wikitable")
-
 }
+
 
 #' @rdname read_wikinodes
 #' @importFrom dplyr %>%
 #' @return A list of tbls
 #' @seealso \code{\link[rvest]{html_table}}
-#' @export
-#' @examples
-#' url <- "https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age"
-#' # returns list of tibbles
-#' prez_tables <- read_wikitables(url)
-#' length(prez_tables)
-
-read_wikitables <- function(url, ...) {
-  read_wikinodes(url) %>%
-  tryCatch(
-    expr = {
-      rvest::html_table(fill = TRUE)
-    },
-    error = function(e){
-      message('Caught an error!')
-      print(e)
-    },
-    warning = function(w){
-      message('Caught a warning!')
-      print(w)
-    }
-  )
-}
-
-#' @rdname read_wikinodes
 #' @export
 #' @examples
 #' url <- "https://en.wikipedia.org/wiki/List_of_presidents_of_the_United_States_by_age"
@@ -73,7 +48,7 @@ read_wikitables <- function(url, ...) {
 #'     purrr::pluck(1)
 #'  }
 
-read_wikitables2 <- function(url, ...) {
+read_wikitables <- function(url, ...) {
   raw <- read_wikinodes(url)
   out <- rvest::html_attrs(raw) %>%
     dplyr::bind_rows()
