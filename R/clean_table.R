@@ -67,7 +67,7 @@ empty_to_na <- function(wiki_tables, to_na = "", special_to_na = TRUE) {
   purrr::map(wiki_tables, add_na_single)
 }
 
-#' @rdname add_na
+#' @rdname special_to_na
 #' @param wiki_table a dataframe
 #' @return a cleaned dataframe
 
@@ -82,12 +82,13 @@ special_to_na_single <- function(wiki_table) {
     )
 }
 
-#' @rdname add_na
+#' @rdname special_to_na
 #' @param wiki_tables a list of dataframes
 #' @return a list of cleaned dataframes
 #' @export
 
 special_to_na <- function(wiki_tables) {
+  wiki_tables <- wiki_tables %>% pull(table)
   purrr::map(wiki_tables, special_to_na_single)
 }
 
@@ -111,6 +112,7 @@ remove_footnotes_single <- function(wiki_table, ...){
 #' @export
 
 remove_footnotes <- function(wiki_tables, ...) {
+  wiki_tables <- wiki_tables %>% pull(table)
   purrr::map(wiki_tables, remove_footnotes_single, ...)
 }
 
@@ -155,6 +157,7 @@ clean_rows_single <- function(wiki_table) {
 #' @export
 
 clean_rows <- function(wiki_tables) {
+  wiki_tables <- wiki_tables %>% pull(table)
   purrr::map(wiki_tables, clean_rows_single)
 }
 
@@ -184,5 +187,6 @@ convert_types_single <- function(wiki_table) {
 #' @return a list of cleaned dataframes
 #' @export
 convert_types <- function(wiki_tables) {
+  wiki_tables <- wiki_tables %>% pull(table)
   purrr::map(wiki_tables, convert_types_single)
 }
